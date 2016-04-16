@@ -25,6 +25,7 @@ public class Main extends Applet implements MouseMotionListener, MouseListener, 
 	
 	GameState state;
 	
+	Player p;
 	
 	// Setup
 	
@@ -38,7 +39,7 @@ public class Main extends Applet implements MouseMotionListener, MouseListener, 
 	    bufferi = createImage(bufferdim.width,bufferdim.height); 
 	    bufferg = bufferi.getGraphics();
 	    
-	    setBackground(Color.black);
+	    setBackground(Color.white);
 	    MyFont = new Font("Arial",Font.BOLD,16);
 	    addMouseListener(this);
 	    addMouseMotionListener(this); 
@@ -57,7 +58,8 @@ public class Main extends Applet implements MouseMotionListener, MouseListener, 
 	public void gameSetup()
 	{
 		// -- Setup Game
-		
+		p = new Player(state);
+		state.elements.add(p);
 		// --
 	}
 	
@@ -70,12 +72,12 @@ public class Main extends Applet implements MouseMotionListener, MouseListener, 
 	
 	public void paint(Graphics g) 
     { 
-		bufferg.setColor(Color.green);
+		bufferg.setColor(Color.black);
         bufferg.fillRect(0,0,bufferdim.width,bufferdim.height);
         
+        bufferg.setColor(Color.red);
         bufferg.setFont(MyFont);
-        
-        
+        bufferg.drawString("hello world", 100, 100);
         
         renderGame(g);
         
