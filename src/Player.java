@@ -214,12 +214,12 @@ public class Player extends Element{
 		// working beyond origin
 		
 		// !!!!! TODO check bounds
-		if((p.getBounds().x < 0 || p.getBounds().x > state.width || p.getBounds().y < 0 || p.getBounds()>state.height))
-		{
+		//if((p.getBounds().x < 0 || p.getBounds().x > state.width || p.getBounds().y < 0 || p.getBounds()>state.height))
+		//{
 			// TODO revert changes
 			// -> morphing
 			// -> moving
-		}
+		//}
 		
 		// collision
 		collGood = 0;
