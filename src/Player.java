@@ -2,6 +2,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Polygon;
 import java.awt.event.KeyEvent;
+import java.awt.geom.Area;
 
 
 public class Player extends Element{
@@ -14,6 +15,8 @@ public class Player extends Element{
 	public Polygon origin;
 	
 	public GameState state;
+	
+	public boolean collision;
 	
 	public Player(GameState s)
 	{
@@ -90,6 +93,12 @@ public class Player extends Element{
         drawCosshair(state.mouseCoordX, state.mouseCoordY, g);
         g.setColor(Color.ORANGE);
         drawCosshair(p.xpoints[mini], p.ypoints[mini], g);
+        
+        if(collision)
+        {
+        	g.setColor(Color.red);
+        	g.drawString("COLLISION",(int)x,(int)y);
+        }
         
 	}
 	
@@ -190,8 +199,21 @@ public class Player extends Element{
 		p.translate((int)x, (int)y);
 		// working beyond origin
 		
-		// TODO check bounds
+		// !!!!! TODO check bounds
 		
+		
+		// collision
+		collision = false;
+		for(int i = 0; i<state.elements.size(); i++)
+			if(state.elements.get(i).getClass() == polyElement.class)
+			{
+				polyElement enemy = (polyElement)state.elements.get(i);
+				Area a = new Area(enemy.p);
+				Area b = new Area(p);
+				a.intersect(b);
+				if(!a.isEmpty())
+					collision = true; // !!! TODO...
+			}
 
 			
 		//p.xpoints[0] += 1;

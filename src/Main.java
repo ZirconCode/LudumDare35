@@ -60,6 +60,17 @@ public class Main extends Applet implements MouseMotionListener, MouseListener, 
 		// -- Setup Game
 		p = new Player(state);
 		state.elements.add(p);
+		
+		polyElement enem = new polyElement();
+		Polygon poly = new Polygon();
+		poly.addPoint(0, 24);
+		poly.addPoint(50, 0);
+		poly.addPoint(80, 50);	
+		poly.addPoint(0, 70);
+		poly.translate(200, 200);
+		enem.p = poly;
+		enem.clr = Color.green;
+		state.elements.addElement(enem);
 		// --
 	}
 	
