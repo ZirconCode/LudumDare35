@@ -78,8 +78,9 @@ public class Main extends Applet implements MouseMotionListener, MouseListener, 
         bufferg.setColor(Color.red);
         bufferg.setFont(MyFont);
         bufferg.drawString("hello world", 100, 100);
-        
+         
         renderGame(g);
+        
         
         
 		g.drawImage(bufferi,0,0,this); 
@@ -145,7 +146,9 @@ public class Main extends Applet implements MouseMotionListener, MouseListener, 
     
     public void mouseDragged(MouseEvent me)  
     { 
-
+    	// TODO!!!
+    	state.mouseCoordX = me.getX();
+    	state.mouseCoordY = me.getY();
     } 
 
     public void mouseClicked (MouseEvent me) 
