@@ -78,7 +78,8 @@ public class Main extends Applet implements MouseMotionListener, MouseListener, 
         bufferg.setColor(Color.red);
         bufferg.setFont(MyFont);
         bufferg.drawString("hello world", 100, 100);
-         
+        bufferg.drawString("w a s d, click mouse to morhp, hold f to freeze", 100, 150);
+        
         renderGame(g);
         
         

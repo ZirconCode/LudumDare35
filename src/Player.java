@@ -25,7 +25,27 @@ public class Player extends Element{
 //		p.addPoint(50, 0);
 //		p.addPoint(50, 50);
 //		p.addPoint(0, 50);
+		
+		x = 100;
+		y = 100; // TODO gamestate.height...
+		
 		// hexagon
+		p.addPoint(25,-43);
+				p.addPoint(-25,-43);
+						p.addPoint(-50,0);
+								p.addPoint(-25,43);
+										p.addPoint(25,43);
+												p.addPoint(50,0);
+		
+		// octagon
+//		p.addPoint(38,-92);
+//		p.addPoint(-38,-92);
+//		p.addPoint(-92,-38);
+//		p.addPoint(-92,38);
+//		p.addPoint(-38,92);
+//		p.addPoint(38,92);
+//		p.addPoint(92,38);
+//		p.addPoint(92,-38);
 		
 		origin = new Polygon();
 		for(int i = 0; i<p.npoints; i++)
@@ -34,17 +54,36 @@ public class Player extends Element{
 	
 	public void render(Graphics g)
 	{
-		g.setColor(Color.pink);
-		if(state.mouseDown) g.setColor(Color.blue);
-		//g.fillRect((int)x, (int)y, 50, 50);
 		
-		g.fillPolygon(p);
 		
-		g.setColor(Color.white);
-        g.drawString("V:"+area(p), (int)x, (int)y);
+		
 		
         g.setColor(Color.RED);
         g.drawLine(p.xpoints[mini], p.ypoints[mini], state.mouseCoordX, state.mouseCoordY);
+        
+        //
+        g.setColor(Color.CYAN);
+        for(int i = 0; i<p.npoints; i++)
+        {
+        	// looks cool as hell but not really useful, but gives idea
+        	// correlate distance of point with larger circle -> gameplay?
+        		//g.drawOval(p.xpoints[i]-5, p.ypoints[i]-5, p.xpoints[i]+10, p.xpoints[i]+10);
+        	
+        	// also totally cool
+        	//        	int diff = (int)(dist(origin.xpoints[i],origin.ypoints[i],p.xpoints[i],p.ypoints[i]))/2;
+        	//        	g.drawOval(p.xpoints[i]-diff, p.ypoints[i]-diff, 2*diff, 2*diff);
+        	int diff = 100;
+        	g.drawOval(p.xpoints[i]-diff, p.ypoints[i]-diff, 2*diff, 2*diff);
+        }
+        
+       
+        g.setColor(Color.pink);
+		if(state.mouseDown) g.setColor(Color.blue);
+		//g.fillRect((int)x, (int)y, 50, 50);
+		g.fillPolygon(p);
+		
+		g.setColor(Color.white);
+        g.drawString("Vol:"+area(p), (int)x, (int)y);
         
         // TODO lighten and make look cooler....
         g.setColor(Color.gray);
@@ -86,7 +125,7 @@ public class Player extends Element{
 		//System.out.println("min:"+mini);
 		
 		// TODO only if mouse outside poly
-		double morphSpeed = 2;
+		double morphSpeed = 3;
 		if(state.mouseDown)
 		{
 			
@@ -110,7 +149,7 @@ public class Player extends Element{
 			//System.out.println("diff:"+diff);
 			
 		}
-		else 
+		else if(!(state.keyDown[KeyEvent.VK_F])) 
 		{
 			// reflow to original poly
 			for(int i = 0; i<p.npoints; i++)
@@ -137,15 +176,16 @@ public class Player extends Element{
 			
 		
 		// have an original we slowly change back to
-				
+			
+		double speed = 1.7;
 		if(state.keyDown[KeyEvent.VK_S])
-			y += 1;
+			y += speed;
 		if(state.keyDown[KeyEvent.VK_W])
-			y += -1;
+			y += -speed;
 		if(state.keyDown[KeyEvent.VK_D])
-			x += 1;
+			x += speed;
 		if(state.keyDown[KeyEvent.VK_A])
-			x += -1;
+			x += -speed;
 
 		p.translate((int)x, (int)y);
 		// working beyond origin
