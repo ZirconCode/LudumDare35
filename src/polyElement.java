@@ -7,6 +7,7 @@ public class polyElement extends Element{
 
 	public Color clr;
 	public Polygon p;
+	public boolean good;
 	
 	public polyElement()
 	{

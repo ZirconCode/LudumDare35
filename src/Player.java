@@ -16,7 +16,11 @@ public class Player extends Element{
 	
 	public GameState state;
 	
-	public boolean collision;
+	public int collBad = 0;
+	public int collGood = 0;
+	
+	public boolean frozenFlag;
+	public boolean frozen;
 	
 	public Player(GameState s)
 	{
@@ -75,7 +79,7 @@ public class Player extends Element{
         	// also totally cool
         	//        	int diff = (int)(dist(origin.xpoints[i],origin.ypoints[i],p.xpoints[i],p.ypoints[i]))/2;
         	//        	g.drawOval(p.xpoints[i]-diff, p.ypoints[i]-diff, 2*diff, 2*diff);
-        	int diff = 100;
+        	int diff = 50;
         	g.drawOval(p.xpoints[i]-diff, p.ypoints[i]-diff, 2*diff, 2*diff);
         }
         
@@ -86,7 +90,7 @@ public class Player extends Element{
 		g.fillPolygon(p);
 		
 		g.setColor(Color.white);
-        g.drawString("Vol:"+area(p), (int)x, (int)y);
+        g.drawString("Vol:"+(int)area(p)+" Dist: "+(int)distMorphed(), (int)x, (int)y);
         
         // TODO lighten and make look cooler....
         g.setColor(Color.gray);
@@ -94,11 +98,10 @@ public class Player extends Element{
         g.setColor(Color.ORANGE);
         drawCosshair(p.xpoints[mini], p.ypoints[mini], g);
         
-        if(collision)
-        {
+        
         	g.setColor(Color.red);
-        	g.drawString("COLLISION",(int)x,(int)y);
-        }
+        	g.drawString("CollGood:"+collGood+"Bad:"+collBad,(int)x,(int)y+20);
+       
         
 	}
 	
@@ -112,6 +115,15 @@ public class Player extends Element{
 	
 	public void tick(GameState s)
 	{
+		if(state.keyDown[KeyEvent.VK_F] )
+		{
+			if(!frozenFlag)
+			{
+				frozen = !frozen;
+				frozenFlag = true;
+			}
+		} else frozenFlag = false;
+		
 		p.translate(-(int)x, -(int)y);
 		double xMo = (state.mouseCoordX-x);
 		double yMo = (state.mouseCoordY-y);
@@ -158,7 +170,7 @@ public class Player extends Element{
 			//System.out.println("diff:"+diff);
 			
 		}
-		else if(!(state.keyDown[KeyEvent.VK_F])) 
+		else if(!frozen) 
 		{
 			// reflow to original poly
 			for(int i = 0; i<p.npoints; i++)
@@ -195,15 +207,23 @@ public class Player extends Element{
 			x += speed;
 		if(state.keyDown[KeyEvent.VK_A])
 			x += -speed;
+		
+		
 
 		p.translate((int)x, (int)y);
 		// working beyond origin
 		
 		// !!!!! TODO check bounds
-		
+		if((p.getBounds().x < 0 || p.getBounds().x > state.width || p.getBounds().y < 0 || p.getBounds()>state.height))
+		{
+			// TODO revert changes
+			// -> morphing
+			// -> moving
+		}
 		
 		// collision
-		collision = false;
+		collGood = 0;
+		collBad = 0;
 		for(int i = 0; i<state.elements.size(); i++)
 			if(state.elements.get(i).getClass() == polyElement.class)
 			{
@@ -212,7 +232,11 @@ public class Player extends Element{
 				Area b = new Area(p);
 				a.intersect(b);
 				if(!a.isEmpty())
-					collision = true; // !!! TODO...
+				{
+					if(enemy.good) collGood += 1;
+					else collBad +=1;
+				}
+				//	collision = true; // !!! TODO...
 			}
 
 			
@@ -222,6 +246,19 @@ public class Player extends Element{
 	public double dist(double x, double y, double x2, double y2)
 	{
 		return Math.hypot(x-x2, y-y2);
+	}
+	
+	public double distMorphed()
+	{
+		// TODO square/root it?
+		p.translate(-(int)x, -(int)y); // TODO...
+		double result = 0;
+		for(int i = 0; i<p.npoints; i++)
+		{
+			result += dist(origin.xpoints[i],origin.ypoints[i],p.xpoints[i],p.ypoints[i]);
+		}
+		p.translate((int)x, (int)y);
+		return result;
 	}
 	
 	// thanks math openref <3
@@ -234,7 +271,7 @@ public class Player extends Element{
 			result = result +  (poly.xpoints[j]+poly.xpoints[i]) * (poly.ypoints[j]-poly.ypoints[i]); 
 			j = i;  //j is previous vertex to i
 		}
-		return -1*result/2;
+		return result/2; // -1*
 	}
 
 	
