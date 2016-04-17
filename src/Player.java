@@ -22,6 +22,8 @@ public class Player extends Element{
 	public boolean frozenFlag;
 	public boolean frozen;
 	
+	public int area; // !TODO int not double
+	
 	public Player(GameState s)
 	{
 		state = s;
@@ -89,8 +91,8 @@ public class Player extends Element{
 		//g.fillRect((int)x, (int)y, 50, 50);
 		g.fillPolygon(p);
 		
-		g.setColor(Color.white);
-        g.drawString("Vol:"+(int)area(p)+" Dist: "+(int)distMorphed(), (int)x, (int)y);
+//		g.setColor(Color.white);
+//        g.drawString("Vol:"+(int)area(p)+" Dist: "+(int)distMorphed(), (int)x, (int)y);
         
         // TODO lighten and make look cooler....
         g.setColor(Color.gray);
@@ -99,8 +101,8 @@ public class Player extends Element{
         drawCosshair(p.xpoints[mini], p.ypoints[mini], g);
         
         
-        	g.setColor(Color.red);
-        	g.drawString("CollGood:"+collGood+"Bad:"+collBad,(int)x,(int)y+20);
+//        	g.setColor(Color.red);
+//        	g.drawString("CollGood:"+collGood+"Bad:"+collBad,(int)x,(int)y+20);
        
         
 	}
@@ -209,11 +211,16 @@ public class Player extends Element{
 			x += -speed;
 		
 		
+		area = (int)area(p);
 
 		p.translate((int)x, (int)y);
 		// working beyond origin
 		
 		// !!!!! TODO check bounds
+		if(x > state.width) x = state.width;
+		if(x<0)x=0;
+		if(y > state.height) y = state.height;
+		if(y<0)y=0; // GOOD ENOUGH ...
 		//if((p.getBounds().x < 0 || p.getBounds().x > state.width || p.getBounds().y < 0 || p.getBounds()>state.height))
 		//{
 			// TODO revert changes

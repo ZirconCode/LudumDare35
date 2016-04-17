@@ -29,6 +29,14 @@ public class Main extends Applet implements MouseMotionListener, MouseListener, 
 	
 	Player p;
 	
+	int level = 0;
+	int score = 0;
+	
+	int goodNeed = 0;
+	int badNeed = 0;
+	
+	Random rand;
+	
 	// Setup
 	
 	public void init() 
@@ -63,8 +71,8 @@ public class Main extends Applet implements MouseMotionListener, MouseListener, 
 		p = new Player(state);
 		state.elements.add(p);
 		
-		Random rand = new Random();
-		rand.setSeed(2223221);
+		rand = new Random();
+		rand.setSeed(1);
 		
 		
 //		for(int i = 0; i<5; i++)
@@ -97,35 +105,8 @@ public class Main extends Applet implements MouseMotionListener, MouseListener, 
 //			enem.clr = Color.green;
 //			state.elements.addElement(enem);
 //		}
-		for(int i = 0; i<6; i++)
-		{
-			polyElement enem = new polyElement();
-			Polygon poly = new Polygon();
-			poly.addPoint(0, 0);
-			poly.addPoint(50, 0);
-			poly.addPoint(50, 50);	
-			poly.addPoint(0, 50);
-			poly.translate(rand.nextInt(state.width), rand.nextInt(state.height));
-			enem.p = poly;
-			enem.clr = Color.green;
-			enem.good = true;
-			state.elements.addElement(enem);	
-		}
-		for(int i = 0; i<6; i++)
-		{
-			polyElement enem = new polyElement();
-			Polygon poly = new Polygon();
-			poly.addPoint(0, 24);
-			poly.addPoint(50, 0);
-			poly.addPoint(80, 50);	
-			poly.addPoint(0, 70);
-			poly.translate(rand.nextInt(state.width), rand.nextInt(state.height));
-			enem.p = poly;
-			enem.clr = Color.red;
-			enem.good = false;
-			state.elements.addElement(enem);
-			
-		}
+		level = 8;
+		makeLevel(level);
 		// --
 	}
 	
@@ -209,10 +190,18 @@ public class Main extends Applet implements MouseMotionListener, MouseListener, 
 		bufferg.setColor(Color.black);
         bufferg.fillRect(0,0,bufferdim.width,bufferdim.height);
         
+        bufferg.setColor(Color.GRAY);
+       // bufferg.setFont(MyFont);
+        //bufferg.drawString("hello world", 100, 100);
+        bufferg.drawString("-> WASD to Move, Hold mouse to Morph Nearest Node, Toggle F to freeze. Touch all Green and no Red to Win.", 20, 20);
+        
+        bufferg.setColor(Color.orange);
+        bufferg.drawString("Level: "+level+ " Score: "+score + " (current area:"+p.area+")", 20, 35);
+        
+        bufferg.drawString("Touching; Good-"+p.collGood+" & Bad-"+p.collBad,20,50);
+        //bufferg.setColor(Color.orange);
         bufferg.setColor(Color.red);
-        bufferg.setFont(MyFont);
-        bufferg.drawString("hello world", 100, 100);
-        bufferg.drawString("w a s d, click mouse to morhp, hold f to freeze", 100, 150);
+        if(p.frozen)bufferg.drawString("Frozen!", 20, 65);
         
         renderGame(g);
         
@@ -253,7 +242,222 @@ public class Main extends Applet implements MouseMotionListener, MouseListener, 
    	 	for(int i = 0; i<state.elements.size(); i++)
    	 		state.elements.get(i).tick(state);
    	 
+   	 	// "levels" TODO so ugly oh dear....
+   	 	if(p.collBad == badNeed && p.collGood == goodNeed)
+   	 	{
+   	 		score += p.area;
+   	 		level++;
+//   	 		if(level == 0)
+//   	 		{
+   	 			state.elements.clear();
+   	 			state.elements.add(p);
+   	 			makeLevel(level);
+//   	 		}
+   	 		
+   	 	}
+   	 	
+   	 	
+   	 	
    	 	// --
+	}
+	
+	// YUCK
+	public void makeLevel(int level)
+	{
+		if(level == 0)
+		{
+			for(int i = 0; i<4; i++)
+			{
+				polyElement enem = new polyElement();
+				Polygon poly = new Polygon();
+				poly.addPoint(0, 0);
+				poly.addPoint(50, 0);
+				poly.addPoint(50, 50);	
+				poly.addPoint(0, 50);
+				poly.translate(rand.nextInt(state.width), rand.nextInt(state.height));
+				enem.p = poly;
+				enem.clr = Color.green;
+				enem.good = true;
+				state.elements.addElement(enem);	
+			}
+			for(int i = 0; i<4; i++)
+			{
+				polyElement enem = new polyElement();
+				Polygon poly = new Polygon();
+				poly.addPoint(0, 24);
+				poly.addPoint(50, 0);
+				poly.addPoint(80, 50);	
+				poly.addPoint(0, 70);
+				poly.translate(rand.nextInt(state.width), rand.nextInt(state.height));
+				enem.p = poly;
+				enem.clr = Color.red;
+				enem.good = false;
+				state.elements.addElement(enem);
+				
+			}
+			
+			goodNeed = 4;
+			badNeed = 0; // yep..
+		}
+		if(level == 1)
+		{
+			rand.setSeed(2);
+			for(int i = 0; i<4; i++)
+			{
+				polyElement enem = new polyElement();
+				Polygon poly = new Polygon();
+				poly.addPoint(0, 0);
+				poly.addPoint(50, 0);
+				poly.addPoint(90, 50);	
+				poly.translate(rand.nextInt(state.width)-50, rand.nextInt(state.height)-50);
+				enem.p = poly;
+				enem.clr = Color.green;
+				enem.good = true;
+				state.elements.addElement(enem);	
+			}
+			for(int i = 0; i<7; i++)
+			{
+				polyElement enem = new polyElement();
+				Polygon poly = new Polygon();
+				poly.addPoint(0, 24);
+				poly.addPoint(200, 0);
+				poly.addPoint(80, 50);	
+				poly.addPoint(0, 70);
+				poly.translate(rand.nextInt(state.width), rand.nextInt(state.height));
+				enem.p = poly;
+				enem.clr = Color.red;
+				enem.good = false;
+				state.elements.addElement(enem);
+				
+			}
+			goodNeed = 4;
+			badNeed = 0; // yep..
+			
+		}
+		if(level == 2)
+		{
+			rand.setSeed(1);
+			for(int i = 0; i<6; i++)
+			{
+				polyElement enem = new polyElement();
+				Polygon poly = new Polygon();
+				poly.addPoint(0, 50);
+				poly.addPoint(25, 0);
+				poly.addPoint(0,0);	
+//				poly.addPoint(0, 70);
+				poly.translate(rand.nextInt(state.width)-50, rand.nextInt(state.height)-50);
+				enem.p = poly;
+				enem.clr = Color.green;
+				enem.good = true;
+				state.elements.addElement(enem);	
+			}
+			for(int i = 0; i<3; i++)
+			{
+				polyElement enem = new polyElement();
+				Polygon poly = new Polygon();
+				
+				poly.addPoint(38,-92);
+				poly.addPoint(-38,-2);
+				poly.addPoint(-92,-38);
+				poly.addPoint(-30,38);
+				poly.addPoint(-38,92);
+				poly.addPoint(38,24);
+				poly.addPoint(200,38);
+				poly.addPoint(92,-138);
+				poly.translate(rand.nextInt(state.width), rand.nextInt(state.height));
+				enem.p = poly;
+				enem.clr = Color.red;
+				enem.good = false;
+				state.elements.addElement(enem);
+				
+			}
+			goodNeed = 6;
+			badNeed = 0; // yep..
+			
+		}
+		if(level > 2 && level < 7)
+		{
+			rand.setSeed(1);
+			if(level == 6) rand.setSeed(2);
+			goodNeed = 2+rand.nextInt(level);
+			for(int i = 0; i<goodNeed; i++)
+			{
+				polyElement enem = new polyElement();
+				Polygon poly = new Polygon();
+				poly.addPoint(0, 0);
+				poly.addPoint(rand.nextInt(200), 0);
+				poly.addPoint(0,rand.nextInt(200));	
+				poly.addPoint(rand.nextInt(200), rand.nextInt(200));
+				poly.translate(rand.nextInt(state.width)-50, rand.nextInt(state.height)-50);
+				enem.p = poly;
+				enem.clr = Color.green;
+				enem.good = true;
+				state.elements.addElement(enem);	
+			}
+			for(int i = 0; i<3+rand.nextInt(level); i++)
+			{
+				polyElement enem = new polyElement();
+				Polygon poly = new Polygon();
+				poly.addPoint(0, 0);
+				poly.addPoint(50, 0);
+				poly.addPoint(50, 50);
+				poly.addPoint(0, 50);
+				poly.translate(rand.nextInt(state.width), rand.nextInt(state.height));
+				enem.p = poly;
+				enem.clr = Color.red;
+				enem.good = false;
+				state.elements.addElement(enem);
+				
+			}
+			
+			badNeed = 0; // yep..
+			
+		}
+		if(level >= 7)
+		{
+			rand.setSeed(1);
+			if(level == 8)rand.setSeed(163);
+			if(level == 6) rand.setSeed(2);
+			goodNeed = 2+rand.nextInt(level);
+			for(int i = 0; i<goodNeed; i++)
+			{
+				polyElement enem = new polyElement();
+				Polygon poly = new Polygon();
+				poly.addPoint(0, 0);
+				poly.addPoint(50, 0);
+				poly.addPoint(50, 50);
+				poly.addPoint(0, 50);
+				poly.translate(rand.nextInt(state.width)-50, rand.nextInt(state.height)-50);
+				enem.p = poly;
+				enem.clr = Color.green;
+				enem.good = true;
+				state.elements.addElement(enem);	
+			}
+			for(int i = 0; i<1+rand.nextInt(level); i++)
+			{
+				polyElement enem = new polyElement();
+				Polygon poly = new Polygon();
+				
+				poly.addPoint(38,-92);
+				poly.addPoint(-38,-2);
+				poly.addPoint(-92,-38);
+				poly.addPoint(-30,38);
+				poly.addPoint(-38,92);
+				poly.addPoint(38,24);
+				poly.addPoint(200,38);
+				poly.addPoint(92,-138);
+				poly.translate(rand.nextInt(state.width), rand.nextInt(state.height));
+				enem.p = poly;
+				enem.clr = Color.red;
+				enem.good = false;
+				state.elements.addElement(enem);
+				
+			}
+			
+			badNeed = 0; // yep..
+			
+		}
+		
 	}
 	
     // Teardown
