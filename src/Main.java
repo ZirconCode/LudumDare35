@@ -105,7 +105,7 @@ public class Main extends Applet implements MouseMotionListener, MouseListener, 
 //			enem.clr = Color.green;
 //			state.elements.addElement(enem);
 //		}
-		level = 8;
+		level = 0;
 		makeLevel(level);
 		// --
 	}
@@ -195,15 +195,25 @@ public class Main extends Applet implements MouseMotionListener, MouseListener, 
         //bufferg.drawString("hello world", 100, 100);
         bufferg.drawString("-> WASD to Move, Hold mouse to Morph Nearest Node, Toggle F to freeze. Touch all Green and no Red to Win.", 20, 20);
         
+        
+        renderGame(g);
+        
+        
         bufferg.setColor(Color.orange);
         bufferg.drawString("Level: "+level+ " Score: "+score + " (current area:"+p.area+")", 20, 35);
         
         bufferg.drawString("Touching; Good-"+p.collGood+" & Bad-"+p.collBad,20,50);
         //bufferg.setColor(Color.orange);
-        bufferg.setColor(Color.red);
+        bufferg.setColor(Color.white);
         if(p.frozen)bufferg.drawString("Frozen!", 20, 65);
         
-        renderGame(g);
+        if(p.collBad == badNeed && p.collGood == goodNeed)
+        {
+        	bufferg.setColor(Color.white);
+        	bufferg.drawString("!!! Press H to Advance Level When Satisfied with Volume !!!", 20, 80);
+        }
+        
+      
         
         
         
@@ -244,6 +254,7 @@ public class Main extends Applet implements MouseMotionListener, MouseListener, 
    	 
    	 	// "levels" TODO so ugly oh dear....
    	 	if(p.collBad == badNeed && p.collGood == goodNeed)
+   	 	if(state.keyDown[KeyEvent.VK_H])
    	 	{
    	 		score += p.area;
    	 		level++;
