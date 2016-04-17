@@ -23,4 +23,8 @@ Have fun and post your highscores!
 
 ----
 
+The game is pure Java, all self written.
+
 Needs: level editor, player shape editor, polish. Some soap after viewing the code.
+
+ToDo: integrate some basic functionality back into https://github.com/ZirconCode/BasicGameApplet
